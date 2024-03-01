@@ -1,0 +1,33 @@
+/* Оформление категорий */
+.categories {
+  display: flex;
+  border-bottom: 1px solid #ccc; /* Добавляем рамку снизу */
+}
+
+.category {
+  padding: 10px;
+  background-color: #eee;
+  cursor: pointer;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-bottom: 0px;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+}
+
+/* Оформление продуктов */
+.products {
+  display: flex;
+  flex-wrap: wrap;
+  border-top: 1px solid #ccc; /* Добавляем рамку сверху */
+}
+
+.product {
+  width: 100px; /* Фиксированная ширина квадрата продукта */
+  height: 100px; /* Фиксированная высота квадрата продукта */
+  margin: 10px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  text-align: center;
+}
