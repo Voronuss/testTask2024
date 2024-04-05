@@ -1,56 +1,50 @@
-document.addEventListener("DOMContentLoaded", function() {
-  var categoriesContainer = document.querySelector('.categories');
-  var productsContainer = document.querySelector('.products');
-  var currentCategoryId = -1; // Идентификатор текущей выбранной категории
+document.addEventListener("DOMContentLoaded", async function() {
+    const response = await fetch('data.json');
+    const data = await response.json();
 
-  // Функция для отображения товаров определенной категории или всех товаров
-  function showProductsByCategory(categoryId) {
-      // Если выбрана та же категория, что и ранее, показываем все товары
-      if (categoryId === currentCategoryId) {
-          categoryId = -1; // Показываем все товары
-      }
+    let categoriesContainer = document.querySelector('.categories');
+    let productsContainer = document.querySelector('.products');
 
-      // Удаляем все дочерние элементы из контейнера товаров
-      while (productsContainer.firstChild) {
-          productsContainer.removeChild(productsContainer.firstChild);
-      }
+    function renderCategories(categories) {
+        categories.forEach(function(category) {
+            let categoryElement = document.createElement('div');
+            categoryElement.textContent = category.categoryName;
+            categoryElement.classList.add('category');
+            categoryElement.dataset.categoryId = category.categoryId;
+            categoriesContainer.appendChild(categoryElement);
 
-      // Отображаем только товары выбранной категории или все товары
-      products.forEach(function(product) {
-          if (categoryId === -1 || product.categoryId === categoryId) {
-              var productElement = document.createElement('div');
-              productElement.textContent = product.productName;
-              productElement.classList.add('product'); // Добавляем класс стиля
-              productsContainer.appendChild(productElement);
-          }
-      });
+            categoryElement.addEventListener('click', function() {
+                let isActive = categoryElement.classList.contains('active');
+                productsContainer.innerHTML = '';
 
-      // Обновляем текущий идентификатор категории
-      currentCategoryId = categoryId;
+                if (isActive) { // Если выбранная категория уже активна, удаляем класс 'active' и отображаем все товары
+                    categoryElement.classList.remove('active');
+                    renderProducts(data.products);
+                } else {
+                    document.querySelectorAll('.category').forEach(function(element) {
+                        element.classList.remove('active');
+                    });
+                    categoryElement.classList.add('active');
 
-      // Изменяем фоновый цвет поля товаров в зависимости от выбранной категории
-      var categories = document.querySelectorAll('.category');
-      categories.forEach(function(category) {
-          if (category.getAttribute('data-category-id') === String(categoryId)) {
-              category.style.backgroundColor = '#fff'; // Белый фон для выбранной категории
-          } else {
-              category.style.backgroundColor = '#eee'; // Серый фон для других категорий
-          }
-      });
-  }
+                    let productsInCategory = data.products.filter(function(product) {
+                        return product.categoryId == category.categoryId;
+                    });
+                    renderProducts(productsInCategory);
+                }
+            });
+        });
+    }
 
-  // Добавляем обработчики событий для категорий
-  categories.forEach(function(category) {
-      var categoryElement = document.createElement('div');
-      categoryElement.textContent = category.categoryName;
-      categoryElement.classList.add('category'); // Добавляем класс стиля
-      categoryElement.setAttribute('data-category-id', category.categoryId); // Устанавливаем атрибут для идентификации категории
-      categoryElement.addEventListener('click', function() {
-          showProductsByCategory(category.categoryId); // Показываем товары выбранной категории
-      });
-      categoriesContainer.appendChild(categoryElement);
-  });
+    function renderProducts(products) {
+        products.forEach(function(product) {
+            let productElement = document.createElement('div');
+            productElement.textContent = product.productName;
+            productElement.classList.add('product');
+            productElement.dataset.categoryId = product.categoryId;
+            productsContainer.appendChild(productElement);
+        });
+    }
 
-  // По умолчанию отображаем все товары
-  showProductsByCategory(-1); // -1 означает, что показываем все товары
+    renderCategories(data.categories);
+    renderProducts(data.products);
 });
