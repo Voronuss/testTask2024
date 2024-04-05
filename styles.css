@@ -1,7 +1,6 @@
-/* Оформление категорий */
 .categories {
   display: flex;
-  border-bottom: 1px solid #ccc; /* Добавляем рамку снизу */
+  border-bottom: 1px solid #ccc;
 }
 
 .category {
@@ -15,16 +14,19 @@
   border-top-left-radius: 3px;
 }
 
-/* Оформление продуктов */
+.category.active {
+  background-color: white;
+}
+
 .products {
   display: flex;
   flex-wrap: wrap;
-  border-top: 1px solid #ccc; /* Добавляем рамку сверху */
+  border-top: 1px solid #ccc;
 }
 
 .product {
-  width: 100px; /* Фиксированная ширина квадрата продукта */
-  height: 100px; /* Фиксированная высота квадрата продукта */
+  width: 100px;
+  height: 100px;
   margin: 10px;
   padding: 20px;
   background-color: #f9f9f9;
